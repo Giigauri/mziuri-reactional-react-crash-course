@@ -1,15 +1,14 @@
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-import { ModalState } from './common/components/Modal/ModalContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-	<ModalState>
+	<BrowserRouter>
 		<App />
-	</ModalState>
+	</BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
