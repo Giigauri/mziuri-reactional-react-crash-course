@@ -8,6 +8,8 @@ type ProductProps = {
 export const Product: React.FC<ProductProps> = ({ product }): JSX.Element => {
 	const [detailsVisible, setDetailsVisible] = useState<boolean>(false);
 
+	console.log('render');
+
 	return (
 		<div className="border py-2 px-4 rounded flex flex-col items-center mb-2">
 			<img src={product.image} className="w-1/6" alt={product.title} />
