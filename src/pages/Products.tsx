@@ -4,20 +4,21 @@ import { ErrorMessage } from '../common/components/ErrorMessage/ErrorMessage';
 import { Modal } from '../common/components/Modal/Modal';
 import { CreateProductForm } from '../components/product/CreateProductForm';
 import { Product } from '../components/product/Product';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { IProduct } from '../components/product/interfaces/product.interface';
 import { ModalContext } from '../common/components/Modal/ModalContext';
 import { useGetData } from '../common/hooks/useGetData.hook';
 import { useAppSelector } from '../state/hooks/useAppSelector.hook';
 import { useAppDispatch } from '../state/hooks/useAppDispatch.hook';
-import { decrement, increment, incrementByAmount } from '../state/slices/counter.slice';
+import { getTodos } from '../state/features/todo/thunks/get-todos.thunk';
+import { GetTodosRequestType } from '../state/features/todo/enums/get-todos-request-type.enum';
 
 export const ProductsPage = () => {
 	const { data, loading, error, isEmpty, addItem } = useGetData<IProduct>('https://fakestoreapi.com/products');
 
-	const { value } = useAppSelector((state) => state.counter);
-
 	const { modalVisible, close, open } = useContext(ModalContext);
+
+	const { todos, todosLoading, userTodos, userTodosLoading } = useAppSelector((state) => state.todo);
 
 	const dispatch = useAppDispatch();
 
@@ -27,25 +28,23 @@ export const ProductsPage = () => {
 		addItem(product);
 	};
 
-	const incrementValue = () => {
-		dispatch(increment());
-	};
+	useEffect(() => {
+		dispatch(getTodos({ requestType: GetTodosRequestType.GET_USER_TODOS, userId: 1 }));
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	const decrementValue = () => {
-		dispatch(decrement());
-	};
+	useEffect(() => {
+		console.log('TODOS LENGTH: ', todos.length);
+		console.log('TODOS LOADING: ', todosLoading);
 
-	const incrementValueByAmount = () => {
-		dispatch(incrementByAmount(25));
-	};
+		console.log('USER TODOS LENGTH: ', userTodos.length);
+		console.log('USER TODOS LOADING: ', userTodosLoading);
+
+		console.log('END');
+	}, [todos, todosLoading, userTodos, userTodosLoading]);
 
 	return (
 		<div className="container mx-auto max-w-2xl pt-5">
-			<button onClick={incrementValue}>INCREMENT</button>
-			<h1 style={{ fontSize: 24, fontWeight: 'bold' }}>{value}</h1>
-			<button onClick={decrementValue}>DECREMENT</button>
-			<button onClick={incrementValueByAmount}> INCREMENT BY AMOUNT</button>
-
 			{loading ? <ContentLoading /> : null}
 			{error.length ? <ErrorMessage message={error} /> : null}
 			{data.length ? data.map((product) => <Product key={product.id} product={product} />) : null}
