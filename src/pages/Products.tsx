@@ -8,17 +8,14 @@ import { useContext, useEffect } from 'react';
 import { IProduct } from '../components/product/interfaces/product.interface';
 import { ModalContext } from '../common/components/Modal/ModalContext';
 import { useGetData } from '../common/hooks/useGetData.hook';
-import { useAppSelector } from '../state/hooks/useAppSelector.hook';
+import { registration } from '../state/features/auth/thunks/registration.thunk';
 import { useAppDispatch } from '../state/hooks/useAppDispatch.hook';
-import { getTodos } from '../state/features/todo/thunks/get-todos.thunk';
-import { GetTodosRequestType } from '../state/features/todo/enums/get-todos-request-type.enum';
+import { login } from '../state/features/auth/thunks/login.thunk';
 
 export const ProductsPage = () => {
 	const { data, loading, error, isEmpty, addItem } = useGetData<IProduct>('https://fakestoreapi.com/products');
 
 	const { modalVisible, close, open } = useContext(ModalContext);
-
-	const { todos, todosLoading, userTodos, userTodosLoading } = useAppSelector((state) => state.todo);
 
 	const dispatch = useAppDispatch();
 
@@ -28,20 +25,27 @@ export const ProductsPage = () => {
 		addItem(product);
 	};
 
+	// useEffect(() => {
+	// 	dispatch(
+	// 		registration({
+	// 			name: 'Davit',
+	// 			phone: '555559999',
+	// 			website: 'website.com',
+	// 			username: 'gigauri112111',
+	// 			email: 'test-react111211@gmail.com',
+	// 			password: '123456',
+	// 		})
+	// 	);
+	// }, []);
+
 	useEffect(() => {
-		dispatch(getTodos({ requestType: GetTodosRequestType.GET_USER_TODOS, userId: 1 }));
-		// eslint-disable-next-line react-hooks/exhaustive-deps
+		dispatch(
+			login({
+				email: 'gigauri@gmail.com',
+				password: '123456789',
+			})
+		);
 	}, []);
-
-	useEffect(() => {
-		console.log('TODOS LENGTH: ', todos.length);
-		console.log('TODOS LOADING: ', todosLoading);
-
-		console.log('USER TODOS LENGTH: ', userTodos.length);
-		console.log('USER TODOS LOADING: ', userTodosLoading);
-
-		console.log('END');
-	}, [todos, todosLoading, userTodos, userTodosLoading]);
 
 	return (
 		<div className="container mx-auto max-w-2xl pt-5">
