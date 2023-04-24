@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { registration } from './thunks/registration.thunk';
 import { login } from './thunks/login.thunk';
+import { getMe } from '../user/thunks/get-me.thunk';
 
-interface IAuthInitialState {
+export interface IAuthInitialState {
 	isAuthenticated: boolean;
 	accessToken: string;
 	loadingForLogin: boolean;
@@ -48,7 +49,14 @@ export const authSlice = createSlice({
 		builder.addCase(login.rejected, (state) => {
 			state.loadingForLogin = false;
 		});
+
+		builder.addCase(getMe.rejected, (state) => {
+			state.accessToken = null;
+			state.isAuthenticated = false;
+		});
 	},
 });
+
+export const { logOut } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

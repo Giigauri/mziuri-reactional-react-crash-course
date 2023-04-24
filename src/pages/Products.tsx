@@ -11,6 +11,7 @@ import { useGetData } from '../common/hooks/useGetData.hook';
 import { registration } from '../state/features/auth/thunks/registration.thunk';
 import { useAppDispatch } from '../state/hooks/useAppDispatch.hook';
 import { login } from '../state/features/auth/thunks/login.thunk';
+import { logOut } from '../state/features/auth/auth.slice';
 
 export const ProductsPage = () => {
 	const { data, loading, error, isEmpty, addItem } = useGetData<IProduct>('https://fakestoreapi.com/products');
@@ -46,6 +47,10 @@ export const ProductsPage = () => {
 			})
 		);
 	}, []);
+
+	// useEffect(() => {
+	// 	dispatch(logOut());
+	// }, []);
 
 	return (
 		<div className="container mx-auto max-w-2xl pt-5">

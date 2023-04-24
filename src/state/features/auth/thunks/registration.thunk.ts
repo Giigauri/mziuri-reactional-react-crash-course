@@ -1,12 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { IRegistrationDTO } from '../interfaces/dtos/registration.dto';
 import { IRegistrationResponse } from '../interfaces/responses/registration.response';
+import { getMe } from '../../user/thunks/get-me.thunk';
 
 import axios from 'axios';
 
 export const registration = createAsyncThunk(
 	'auth/registration',
-	async (DTO: IRegistrationDTO, { rejectWithValue }) => {
+	async (DTO: IRegistrationDTO, { rejectWithValue, dispatch }) => {
 		try {
 			const config = {
 				headers: {
@@ -21,6 +22,8 @@ export const registration = createAsyncThunk(
 				request_body,
 				config
 			);
+
+			dispatch(getMe(data.access_token));
 
 			return data.access_token;
 		} catch (error) {
