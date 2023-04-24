@@ -12,7 +12,7 @@ export const getMe = createAsyncThunk('user/getMe', async (accessToken: string, 
 			},
 		};
 
-		const { data } = await axios.get<IGetMeResponse>('http://localhost:5001/api/userssdsd/mesdsdsdsd', config);
+		const { data } = await axios.get<IGetMeResponse>('http://localhost:5002/api/users/me', config);
 
 		return data.user;
 	} catch (error) {

@@ -15,7 +15,7 @@ export const login = createAsyncThunk('auth/login', async (DTO: ILoginDTO, { rej
 
 		const request_body = JSON.stringify(DTO);
 
-		const { data } = await axios.post<ILoginResponse>('http://localhost:5001/api/auth/login', request_body, config);
+		const { data } = await axios.post<ILoginResponse>('http://localhost:5002/api/auth/login', request_body, config);
 
 		dispatch(getMe(data.access_token));
 
