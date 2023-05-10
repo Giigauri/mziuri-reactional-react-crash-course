@@ -4,6 +4,7 @@ import { getCategories } from './thunks/get-categories.thunk';
 import { createCategory } from './thunks/create-category.thunk';
 import { deleteCategory } from './thunks/delete-category.thunk';
 import { updateCategory } from './thunks/update-category.thunk';
+import { deleteSubCategory } from '../sub-category/thunks/delete-sub-category.thunk';
 
 interface ICategoryInitialState {
 	categories: ICategory[];
@@ -78,13 +79,19 @@ export const categorySlice = createSlice({
 			state.loadingForDeleteCategory = false;
 		});
 
-		// builder.addCase(deleteSubCategory.fulfilled, (state, action) => {
-		// 	categories[
-		// 		{
-		// 			sub_Categories: [ObjectId],
-		// 		}
-		// 	];
-		// });
+		builder.addCase(deleteSubCategory.fulfilled, (state, action) => {
+			for (let index = 0; index < state.categories.length; index++) {
+				const in_sub_categories = state.categories[index].sub_categories.some(
+					(sub_category) => String(sub_category) === String(action.meta.arg)
+				);
+
+				if (in_sub_categories) {
+					state.categories[index].sub_categories = state.categories[index].sub_categories.filter(
+						(sub_category) => String(sub_category) !== action.meta.arg
+					);
+				}
+			}
+		});
 	},
 });
 
